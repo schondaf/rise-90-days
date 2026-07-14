@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schonda · 90 Days</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --midnight: #080818;
+    --deep: #0d0d2b;
+    --indigo: #1a1a4e;
+    --gold: #c9930c;
+    --gold-soft: #e8b84b;
+    --gold-dim: rgba(201,147,12,0.15);
+    --teal: #0e7c7b;
+    --teal-dim: rgba(14,124,123,0.12);
+    --white: #f5f3ef;
+    --gray: rgba(245,243,239,0.55);
+    --gray-dim: rgba(245,243,239,0.2);
+    --purple: #2d1b69;
+    --purple-soft: rgba(45,27,105,0.4);
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--midnight);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* Stars background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(201,147,12,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 70%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 10% 80%, rgba(201,147,12,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 50%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 20%, rgba(255,255,255,0.25) 0%, transparent 100%),
+      radial-gradient(1px 1px at 65% 85%, rgba(201,147,12,0.2) 0%, transparent 100%),
+      radial-gradient(600px circle at 30% 20%, rgba(45,27,105,0.3) 0%, transparent 60%),
+      radial-gradient(800px circle at 80% 80%, rgba(14,124,123,0.1) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 440px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 40px 28px 24px;
+    text-align: center;
+    border-bottom: 1px solid var(--gray-dim);
+  }
+
+  .header-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--white);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── NAV ── */
+  .nav {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    padding: 0 28px;
+    border-bottom: 1px solid var(--gray-dim);
+  }
+
+  .nav-btn {
+    flex: 1;
+    padding: 14px 8px;
+    background: none;
+    border: none;
+    color: var(--gray);
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.2s;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+
+  .nav-btn.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ── SCREENS ── */
+  .screen { display: none; padding: 28px; }
+  .screen.active { display: block; }
+
+  /* ── DAY COUNTER ── */
+  .day-hero {
+    text-align: center;
+    padding: 32px 0 24px;
+  }
+
+  .day-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 88px;
+    line-height: 1;
+    font-weight: 300;
+    color: var(--gold);
+    display: block;
+  }
+
+  .day-label {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-top: 4px;
+    display: block;
+  }
+
+  .day-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--gray);
+    line-height: 1.6;
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid var(--gray-dim);
+    border-bottom: 1px solid var(--gray-dim);
+    margin: 0 0 24px;
+  }
+
+  /* ── PROGRESS GRID ── */
+  .progress-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .dot-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+
+  .dot {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--gray-dim);
+    border: 1px solid rgba(245,243,239,0.08);
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    color: rgba(245,243,239,0.3);
+  }
+
+  .dot.done { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 6px rgba(201,147,12,0.5); color: var(--midnight); font-weight: 600; }
+  .dot.today { background: rgba(201,147,12,0.12); border-color: var(--gold); box-shadow: 0 0 8px rgba(201,147,12,0.4); animation: pulse-dot 2s ease-in-out infinite; color: var(--gold); font-weight: 600; }
+  .dot.missed { background: rgba(139,26,26,0.4); border-color: rgba(139,26,26,0.3); color: rgba(245,243,239,0.4); }
+
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 6px rgba(201,147,12,0.3); }
+    50% { box-shadow: 0 0 14px rgba(201,147,12,0.7); }
+  }
+
+  /* ── CHECKLIST ── */
+  .check-section {
+    background: var(--purple-soft);
+    border: 1px solid rgba(45,27,105,0.6);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .check-title {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    cursor: pointer;
+    border-bottom: 1px solid var(--gray-dim);
+  }
+
+  .check-item:last-child { border-bottom: none; }
+
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--gray-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .check-item.checked .check-box {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .check-item.checked .check-box::after {
+    content: '✓';
+    font-size: 11px;
+    color: var(--midnight);
+    font-weight: 500;
+  }
+
+  .check-text {
+    font-size: 14px;
+    color: var(--white);
+    line-height: 1.4;
+  }
+
+  .check-item.checked .check-text {
+    color: var(--gray);
+    text-decoration: line-through;
+    text-decoration-color: var(--gold-dim);
+  }
+
+  .check-time {
+    font-size: 11px;
+    color: var(--gray);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .complete-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--gold);
+    border: none;
+    border-radius: 10px;
+    color: var(--midnight);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.2s;
+  }
+
+  .complete-btn:hover { background: var(--gold-soft); }
+  .complete-btn:disabled { opacity: 0.4; cursor: default; }
+
+  /* ── BREATH SCREEN ── */
+  .breath-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0 32px;
+  }
+
+  .breath-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    text-align: center;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .breath-subtitle {
+    font-size: 12px;
+    color: var(--gray);
+    text-align: center;
+    letter-spacing: 0.08em;
+    margin-bottom: 36px;
+  }
+
+  .circle-wrap {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    margin-bottom: 28px;
+  }
+
+  .circle-outer {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px solid var(--gray-dim);
+  }
+
+  .circle-ring {
+    position: absolute;
+    inset: 12px;
+    border-radius: 50%;
+    border: 1.5px solid var(--gold-dim);
+    transition: all 0.1s;
+  }
+
+  .circle-main {
+    position: absolute;
+    inset: 30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(45,27,105,0.6) 0%, rgba(8,8,24,0.8) 100%);
+    border: 1.5px solid var(--purple);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  .breath-phase {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-style: italic;
+    color: var(--gold);
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .breath-count {
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--white);
+    margin-top: 4px;
+  }
+
+  .breath-rounds {
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 0.15em;
+    margin-top: 8px;
+  }
+
+  /* Breathing animation states */
+  .circle-main.inhale {
+    inset: 20px;
+    background: radial-gradient(circle, rgba(45,27,105,0.8) 0%, rgba(14,124,123,0.15) 100%);
+    border-color: var(--teal);
+    box-shadow: 0 0 30px rgba(14,124,123,0.2);
+  }
+
+  .circle-main.hold {
+    border-color: var(--gold);
+    box-shadow: 0 0 20px rgba(201,147,12,0.2);
+  }
+
+  .circle-main.exhale {
+    inset: 40px;
+    background: radial-gradient(circle, rgba(8,8,24,0.9) 0%, rgba(45,27,105,0.3) 100%);
+    border-color: rgba(201,147,12,0.3);
+  }
+
+  .breath-btn {
+    padding: 14px 48px;
+    background: transparent;
+    border: 1.5px solid var(--gold);
+    border-radius: 100px;
+    color: var(--gold);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 24px;
+  }
+
+  .breath-btn:hover { background: var(--gold-dim); }
+  .breath-btn.running { border-color: var(--teal); color: var(--teal); }
+
+  .breath-instruction {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--gray);
+    text-align: center;
+    line-height: 1.7;
+    max-width: 320px;
+    padding-top: 16px;
+    border-top: 1px solid var(--gray-dim);
+  }
+
+  /* Modes */
+  .mode-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 100px;
+    padding: 4px;
+  }
+
+  .mode-btn {
+    flex: 1;
+    padding: 10px;
+    background: none;
+    border: none;
+    border-radius: 100px;
+    color: var(--gray);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mode-btn.active {
+    background: var(--gold-dim);
+    color: var(--gold);
+  }
+
+  /* ── JOURNAL ── */
+  .journal-q {
+    margin-bottom: 20px;
+  }
+
+  .q-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .q-input {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--gray-dim);
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.6;
+    resize: none;
+    min-height: 80px;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  .q-input:focus {
+    outline: none;
+    border-color: rgba(201,147,12,0.4);
+  }
+
+  .q-input::placeholder { color: var(--gray-dim); }
+
+  .declaration-wrap {
+    background: linear-gradient(135deg, rgba(45,27,105,0.4), rgba(14,124,123,0.15));
+    border: 1px solid rgba(201,147,12,0.25);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .declaration-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .declaration-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.5;
+  }
+
+  .say-btn {
+    margin-top: 16px;
+    padding: 12px 32px;
+    background: var(--gold-dim);
+    border: 1px solid var(--gold);
+    border-radius: 100px;
+    color: var(--gold);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .say-btn.said {
+    background: var(--gold);
+    color: var(--midnight);
+  }
+
+  .save-journal-btn {
+    width: 100%;
+    padding: 16px;
+    background: transparent;
+    border: 1.5px solid var(--teal);
+    border-radius: 10px;
+    color: var(--teal);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+
+  .save-journal-btn:hover { background: var(--teal-dim); }
+
+  .autosave-note {
+    text-align: center;
+    font-size: 11px;
+    color: var(--gray-dim);
+    letter-spacing: 0.05em;
+    margin-top: 10px;
+    transition: color 0.3s;
+  }
+
+  .autosave-note.saved {
+    color: var(--teal);
+  }
+
+  /* ── WISDOM ── */
+  .wisdom-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--gray-dim);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .wisdom-tag {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .wisdom-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.65;
+  }
+
+  .wisdom-source {
+    font-size: 11px;
+    color: var(--gray);
+    margin-top: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--gold);
+    color: var(--midnight);
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 100;
+    white-space: nowrap;
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 440px;
+    background: rgba(8,8,24,0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--gray-dim);
+    display: flex;
+    padding: 8px 0 20px;
+    z-index: 50;
+  }
+
+  .bnav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gray);
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+
+  .bnav-btn.active { color: var(--gold); }
+
+  .bnav-icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  /* Responsive */
+  @media (max-width: 440px) {
+    .app { padding: 0 0 100px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <div class="header-name">Schonda Fields</div>
+    <div class="header-title">90 Days of Rising 🐉</div>
+  </div>
+
+  <!-- TODAY SCREEN -->
+  <div class="screen active" id="screen-today">
+    <div class="day-hero">
+      <span class="day-number" id="day-number">1</span>
+      <span class="day-label">of 90 days</span>
+    </div>
+
+    <div class="day-quote" id="daily-quote">
+      "I am exactly the person this moment has been waiting for."
+    </div>
+
+    <div class="progress-label">Your 90 Days · tap a gold day to revisit it</div>
+    <div class="dot-grid" id="dot-grid"></div>
+
+    <div class="check-section">
+      <div class="check-title">Morning Anchor · 5 min</div>
+      <div class="check-item" id="check-1" onclick="toggleCheck(1)">
+        <div class="check-box"></div>
+        <div class="check-text">Rise · cold water on face + wrists</div>
+        <div class="check-time">5:00</div>
+      </div>
+      <div class="check-item" id="check-2" onclick="toggleCheck(2)">
+        <div class="check-box"></div>
+        <div class="check-text">Green juice</div>
+        <div class="check-time">5:05</div>
+      </div>
+      <div class="check-item" id="check-3" onclick="toggleCheck(3)">
+        <div class="check-box"></div>
+        <div class="check-text">Lie flat · 3 rounds Vajra Samadhi breathing</div>
+        <div class="check-time">5:10</div>
+      </div>
+      <div class="check-item" id="check-4" onclick="toggleCheck(4)">
+        <div class="check-box"></div>
+        <div class="check-text">Ong Namo Guru Dev Namo · 3×</div>
+        <div class="check-time">5:13</div>
+      </div>
+      <div class="check-item" id="check-5" onclick="toggleCheck(5)">
+        <div class="check-box"></div>
+        <div class="check-text">Kundalini kriya · 30 min</div>
+        <div class="check-time">5:15</div>
+      </div>
+      <div class="check-item" id="check-6" onclick="toggleCheck(6)">
+        <div class="check-box"></div>
+        <div class="check-text">Shavasana · 11 min</div>
+        <div class="check-time">5:45</div>
+      </div>
+      <div class="check-item" id="check-7" onclick="toggleCheck(7)">
+        <div class="check-box"></div>
+        <div class="check-text">Kirtan Kriya · Sa Ta Na Ma · 22 min</div>
+        <div class="check-time">5:56</div>
+      </div>
+      <div class="check-item" id="check-8" onclick="toggleCheck(8)">
+        <div class="check-box"></div>
+        <div class="check-text">Tara mantra · Oṃ Tāre Tuttāre Ture Svāhā</div>
+        <div class="check-time">6:18</div>
+      </div>
+      <div class="check-item" id="check-9" onclick="toggleCheck(9)">
+        <div class="check-box"></div>
+        <div class="check-text">Three questions journal</div>
+        <div class="check-time">6:28</div>
+      </div>
+      <div class="check-item" id="check-10" onclick="toggleCheck(10)">
+        <div class="check-box"></div>
+        <div class="check-text">Declaration out loud · seal the practice</div>
+        <div class="check-time">6:33</div>
+      </div>
+    </div>
+
+    <div class="check-section">
+      <div class="check-title">Evening Close</div>
+      <div class="check-item" id="check-11" onclick="toggleCheck(11)">
+        <div class="check-box"></div>
+        <div class="check-text">Yin yoga or restorative · 20 min</div>
+        <div class="check-time">8:30</div>
+      </div>
+      <div class="check-item" id="check-12" onclick="toggleCheck(12)">
+        <div class="check-box"></div>
+        <div class="check-text">Evening question written: Where did I dim myself today?</div>
+        <div class="check-time">8:50</div>
+      </div>
+      <div class="check-item" id="check-13" onclick="toggleCheck(13)">
+        <div class="check-box"></div>
+        <div class="check-text">Screens off · 9:00 PM</div>
+        <div class="check-time">9:00</div>
+      </div>
+    </div>
+
+    <button class="complete-btn" id="complete-btn" onclick="completeDay()">
+      Mark This Day Complete ✓
+    </button>
+  </div>
+
+  <!-- BREATH SCREEN -->
+  <div class="screen" id="screen-breath">
+    <div class="breath-container">
+      <div class="breath-title">Vajra Samadhi</div>
+      <div class="breath-subtitle">Diamond Breath · For any moment</div>
+
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="mode-3" onclick="setMode(3)">3 Rounds</button>
+        <button class="mode-btn" id="mode-9" onclick="setMode(9)">9 Rounds</button>
+        <button class="mode-btn" id="mode-free" onclick="setMode(0)">Free</button>
+      </div>
+
+      <div class="circle-wrap">
+        <div class="circle-outer"></div>
+        <div class="circle-ring" id="circle-ring"></div>
+        <div class="circle-main" id="circle-main">
+          <div class="breath-phase" id="breath-phase">Ready</div>
+          <div class="breath-count" id="breath-count">·</div>
+          <div class="breath-rounds" id="breath-rounds">ROUND 0 / 3</div>
+        </div>
+      </div>
+
+      <button class="breath-btn" id="breath-start-btn" onclick="toggleBreath()">
+        Begin
+      </button>
+
+      <div class="breath-instruction">
+        Inhale slowly belly to chest.<br>
+        Natural pause at the top.<br>
+        Exhale slowly chest to belly.<br>
+        Rest at the bottom.<br><br>
+        <em>Nothing forced. The breath moves because it must.</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOURNAL SCREEN -->
+  <div class="screen" id="screen-journal">
+    <div class="journal-q">
+      <div class="q-label">Question 1 · Morning</div>
+      <div class="q-text">What am I afraid of today?</div>
+      <textarea class="q-input" id="j1" placeholder="Be honest, not positive..." rows="3"></textarea>
+    </div>
+
+    <div class="journal-q">
+      <div class="q-label">Question 2 · Morning</div>
+      <div class="q-text">What do I know to be true today?</div>
+      <textarea class="q-input" id="j2" placeholder="Anchor yourself here..." rows="3"></textarea>
+    </div>
+
+    <div class="journal-q">
+      <div class="q-label">Question 3 · Morning</div>
+      <div class="q-text">What is the one move that matters today?</div>
+      <textarea class="q-input" id="j3" placeholder="Just one..." rows="3"></textarea>
+    </div>
+
+    <div class="declaration-wrap">
+      <div class="declaration-label">Say this out loud</div>
+      <div class="declaration-text">
+        "I am exactly the person<br>this moment has been waiting for."
+      </div>
+      <button class="say-btn" id="say-btn" onclick="markSaid()">
+        I said it
+      </button>
+    </div>
+
+    <div class="journal-q">
+      <div class="q-label">Question 4 · Evening</div>
+      <div class="q-text">Where did I dim myself today — and why?</div>
+      <textarea class="q-input" id="j4" placeholder="Name it without judgment. Then let it go." rows="3"></textarea>
+    </div>
+
+    <button class="save-journal-btn" onclick="saveJournal()">Save Today's Journal</button>
+    <div class="autosave-note" id="autosave-note">Autosaving as you write</div>
+  </div>
+
+  <!-- WISDOM SCREEN -->
+  <div class="screen" id="screen-wisdom">
+    <div class="wisdom-card">
+      <div class="wisdom-tag">Vajrayana · On the Practice</div>
+      <div class="wisdom-text">"The snake is not waiting to become the dragon. The snake is the dragon, not yet remembering its own wings."</div>
+      <div class="wisdom-source">Tibetan teaching</div>
+    </div>
+
+    <div class="wisdom-card">
+      <div class="wisdom-tag">Tara · On Swift Action</div>
+      <div class="wisdom-text">Oṃ Tāre Tuttāre Ture Sarva Vighnān Baṃ Hūṃ Phaṭ Svāhā<br><br>She liberates all obstacles without exception. Not some. Not the obvious ones. All of them.</div>
+      <div class="wisdom-source">Jigjé Chenmo · Your mantra</div>
+    </div>
+
+    <div class="wisdom-card">
+      <div class="wisdom-tag">Chöd · On the Emergency Brake</div>
+      <div class="wisdom-text">When the channel opens and the old hand reaches for the dimmer switch — this is the moment Chöd was made for. Not to fight the hand. To offer it completely, transform it into nectar, and discover there was nothing to fear.</div>
+      <div class="wisdom-source">Machig Labdrön lineage</div>
+    </div>
+
+    <div class="wisdom-card">
+      <div class="wisdom-tag">Kundalini · On Rising</div>
+      <div class="wisdom-text">"You are a channel. Your only job is to stay open. The light knows where it is going."</div>
+      <div class="wisdom-source">Yogi Bhajan</div>
+    </div>
+
+    <div class="wisdom-card">
+      <div class="wisdom-tag">Rupert Spira · On Being</div>
+      <div class="wisdom-text">The feeling of readiness never arrives before the action. The action is what creates the feeling. You are already the awareness in which all of this is happening.</div>
+      <div class="wisdom-source">The Nature of Consciousness</div>
+    </div>
+
+    <div class="wisdom-card">
+      <div class="wisdom-tag">Vedic Chart · Saturn in the 10th</div>
+      <div class="wisdom-text">The career IS the tapasya. What you are building in the world is not separate from what you are building inside. Saturn here delivers — but only after the full foundation is laid. You are laying it now.</div>
+      <div class="wisdom-source">Jyotish · Schonda's chart</div>
+    </div>
+
+    <div class="wisdom-card">
+      <div class="wisdom-tag">For the Overwhelm</div>
+      <div class="wisdom-text">Three breaths. One sentence.<br><br>That is the entire practice when the world is too loud. You do not need more. You need less, more completely.</div>
+      <div class="wisdom-source">The Divine Champion Plan</div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+  <button class="bnav-btn active" id="bnav-today" onclick="showScreen('today')">
+    <span class="bnav-icon">☀️</span>Today
+  </button>
+  <button class="bnav-btn" id="bnav-breath" onclick="showScreen('breath')">
+    <span class="bnav-icon">◎</span>Breathe
+  </button>
+  <button class="bnav-btn" id="bnav-journal" onclick="showScreen('journal')">
+    <span class="bnav-icon">✦</span>Journal
+  </button>
+  <button class="bnav-btn" id="bnav-wisdom" onclick="showScreen('wisdom')">
+    <span class="bnav-icon">🐉</span>Wisdom
+  </button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──
+// currentDayNum = the day she is actively working on (1-90)
+// completedDays = array of day numbers she has fully completed
+// checks/journals/declarations are now keyed by DAY NUMBER, not calendar date
+const STATE_KEY = 'schonda_90_v2';
+let state = JSON.parse(localStorage.getItem(STATE_KEY) || 'null');
+
+// Migrate old version if it exists, otherwise fresh start
+if (!state) {
+  state = {
+    currentDay: 1,
+    completedDays: [],
+    checks: {},      // { "1": [1,2,3], "2": [1,4] }
+    journals: {},     // { "1": {j1:"",j2:"",j3:"",j4:""} }
+    declarations: {}  // { "1": true }
+  };
+
+  // One-time migration: if she already completed Day 1 under the old
+  // calendar-date system, carry that progress forward so she doesn't
+  // lose what she already did.
+  try {
+    const old = JSON.parse(localStorage.getItem('schonda_90') || 'null');
+    if (old && old.completedDays && old.completedDays.length > 0) {
+      state.completedDays = [1];
+      state.currentDay = 2;
+      const oldDateKeys = Object.keys(old.checks || {});
+      if (oldDateKeys.length > 0) {
+        state.checks['1'] = old.checks[oldDateKeys[0]] || [];
+      }
+      const oldJournalKeys = Object.keys(old.journals || {});
+      if (oldJournalKeys.length > 0) {
+        state.journals['1'] = old.journals[oldJournalKeys[0]] || {};
+      }
+      const oldDeclKeys = Object.keys(old.declarations || {});
+      if (oldDeclKeys.length > 0) {
+        state.declarations['1'] = true;
+      }
+    }
+  } catch(e) {}
+
+  save();
+}
+
+function save() {
+  try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function activeDay() {
+  return state.currentDay;
+}
+
+// ── QUOTES ──
+const quotes = [
+  "I am exactly the person this moment has been waiting for.",
+  "The snake is not waiting to become the dragon. She is the dragon, remembering her wings.",
+  "Oṃ Tāre Tuttāre Ture — she liberates all obstacles. All of them.",
+  "Three breaths. One sentence. This is the entire practice when the world is too loud.",
+  "The feeling of readiness never arrives before the action. The action creates the feeling.",
+  "You are not behind. You are exactly where someone with your preparation is supposed to be.",
+  "Full power is not dangerous. It is your nature.",
+  "The career IS the tapasya. What you build in the world is what you build inside.",
+  "She does not perform power. She inhabits it.",
+  "The dragon breathes fire because fire is her nature — not because she is angry.",
+  "Sat Nam. I am truth.",
+  "Every day she chooses differently, the old pattern loses its grip.",
+  "She walks in as the solution. Not the candidate.",
+  "The sadhana is not the preparation. The sadhana is the rising.",
+];
+
+// ── INIT ──
+function init() {
+  const day = activeDay();
+  document.getElementById('day-number').textContent = day;
+  document.getElementById('daily-quote').textContent = quotes[(day - 1) % quotes.length];
+  buildDotGrid(day);
+  loadChecks();
+  loadJournal();
+  updateCompleteButton();
+}
+
+function buildDotGrid(currentDay) {
+  const grid = document.getElementById('dot-grid');
+  grid.innerHTML = '';
+  for (let i = 1; i <= 90; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.textContent = i;
+    if (state.completedDays.includes(i)) dot.classList.add('done');
+    else if (i === currentDay) dot.classList.add('today');
+    dot.onclick = () => jumpToDay(i);
+    grid.appendChild(dot);
+  }
+}
+
+function jumpToDay(i) {
+  // Allow tapping any completed day or the current day to review it.
+  // Allow tapping ONE day ahead only if current day is already complete.
+  if (state.completedDays.includes(i) || i === state.currentDay) {
+    state.currentDay = i;
+    save();
+    init();
+    showToast('Viewing Day ' + i);
+  } else if (i === state.currentDay + 1 && state.completedDays.includes(state.currentDay)) {
+    state.currentDay = i;
+    save();
+    init();
+    showToast('Day ' + i + ' begins 🐉');
+  }
+}
+
+// ── CHECKS (keyed by day number) ──
+function loadChecks() {
+  const key = String(activeDay());
+  const checks = state.checks[key] || [];
+  document.querySelectorAll('.check-item').forEach(el => el.classList.remove('checked'));
+  checks.forEach(id => {
+    const el = document.getElementById('check-' + id);
+    if (el) el.classList.add('checked');
+  });
+}
+
+function toggleCheck(id) {
+  const key = String(activeDay());
+  if (!state.checks[key]) state.checks[key] = [];
+  const idx = state.checks[key].indexOf(id);
+  if (idx === -1) state.checks[key].push(id);
+  else state.checks[key].splice(idx, 1);
+  save();
+  loadChecks();
+}
+
+function updateCompleteButton() {
+  const day = activeDay();
+  const btn = document.getElementById('complete-btn');
+  if (state.completedDays.includes(day)) {
+    btn.textContent = 'Day ' + day + ' Complete ✓ — Tap to go to Day ' + (day + 1);
+  } else {
+    btn.textContent = 'Mark This Day Complete ✓';
+  }
+}
+
+function completeDay() {
+  const day = activeDay();
+  if (!state.completedDays.includes(day)) {
+    state.completedDays.push(day);
+    save();
+    buildDotGrid(day);
+    updateCompleteButton();
+    showToast('Day ' + day + ' complete 🐉');
+  } else {
+    // Already complete — advance to next day
+    if (day < 90) {
+      state.currentDay = day + 1;
+      save();
+      init();
+      showToast('Day ' + (day + 1) + ' begins 🐉');
+    } else {
+      showToast('All 90 days complete 🐉🐉🐉');
+    }
+  }
+}
+
+// ── JOURNAL (keyed by day number) ──
+let autosaveTimer = null;
+
+function loadJournal() {
+  const key = String(activeDay());
+  const j = state.journals[key] || {};
+  ['j1','j2','j3','j4'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = j[id] || '';
+  });
+  const said = !!state.declarations[key];
+  const sayBtn = document.getElementById('say-btn');
+  if (said) {
+    sayBtn.classList.add('said');
+    sayBtn.textContent = 'Said ✓';
+  } else {
+    sayBtn.classList.remove('said');
+    sayBtn.textContent = 'I said it';
+  }
+  wireAutosave();
+}
+
+function wireAutosave() {
+  ['j1','j2','j3','j4'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || el.dataset.wired) return;
+    el.dataset.wired = '1';
+    el.addEventListener('input', () => {
+      clearTimeout(autosaveTimer);
+      const note = document.getElementById('autosave-note');
+      note.textContent = 'Saving...';
+      note.classList.remove('saved');
+      autosaveTimer = setTimeout(() => {
+        saveJournal(true);
+        note.textContent = 'Saved ✓';
+        note.classList.add('saved');
+        setTimeout(() => {
+          note.textContent = 'Autosaving as you write';
+          note.classList.remove('saved');
+        }, 1800);
+      }, 600);
+    });
+  });
+}
+
+function saveJournal(silent) {
+  const key = String(activeDay());
+  state.journals[key] = {
+    j1: document.getElementById('j1').value,
+    j2: document.getElementById('j2').value,
+    j3: document.getElementById('j3').value,
+    j4: document.getElementById('j4').value,
+  };
+  save();
+  if (!silent) showToast('Journal saved ✓');
+}
+
+function markSaid() {
+  const key = String(activeDay());
+  state.declarations[key] = true;
+  save();
+  const btn = document.getElementById('say-btn');
+  btn.classList.add('said');
+  btn.textContent = 'Said ✓';
+  showToast('The declaration is done 🌟');
+}
+
+// ── BREATHING ──
+let breathMode = 3;
+let breathRunning = false;
+let breathInterval = null;
+let currentRound = 0;
+let breathPhaseIndex = 0;
+
+// Vajra Samadhi phases: inhale 4s, hold 2s, exhale 6s, rest 2s
+const phases = [
+  { name: 'Inhale', dur: 4, cls: 'inhale' },
+  { name: 'Hold', dur: 2, cls: 'hold' },
+  { name: 'Exhale', dur: 6, cls: 'exhale' },
+  { name: 'Rest', dur: 2, cls: '' },
+];
+
+let phaseTimer = 0;
+let phaseCount = 0;
+
+function setMode(m) {
+  breathMode = m;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('mode-' + (m === 0 ? 'free' : m)).classList.add('active');
+  if (breathRunning) stopBreath();
+  document.getElementById('breath-rounds').textContent = m === 0 ? 'FREE' : 'ROUND 0 / ' + m;
+}
+
+function toggleBreath() {
+  if (breathRunning) stopBreath();
+  else startBreath();
+}
+
+function startBreath() {
+  breathRunning = true;
+  currentRound = 0;
+  breathPhaseIndex = 0;
+  phaseTimer = phases[0].dur;
+
+  const btn = document.getElementById('breath-start-btn');
+  btn.textContent = 'Pause';
+  btn.classList.add('running');
+
+  updateBreathUI();
+  breathInterval = setInterval(tick, 1000);
+}
+
+function stopBreath() {
+  breathRunning = false;
+  clearInterval(breathInterval);
+  breathInterval = null;
+
+  const btn = document.getElementById('breath-start-btn');
+  btn.textContent = 'Begin';
+  btn.classList.remove('running');
+
+  const circle = document.getElementById('circle-main');
+  circle.className = 'circle-main';
+  document.getElementById('breath-phase').textContent = 'Ready';
+  document.getElementById('breath-count').textContent = '·';
+  document.getElementById('breath-rounds').textContent = breathMode === 0 ? 'FREE' : 'ROUND 0 / ' + breathMode;
+}
+
+function tick() {
+  phaseTimer--;
+  document.getElementById('breath-count').textContent = phaseTimer || '·';
+
+  if (phaseTimer <= 0) {
+    breathPhaseIndex = (breathPhaseIndex + 1) % phases.length;
+    if (breathPhaseIndex === 0) {
+      currentRound++;
+      if (breathMode > 0 && currentRound >= breathMode) {
+        stopBreath();
+        showToast('✓ ' + breathMode + ' rounds complete');
+        return;
+      }
+    }
+    phaseTimer = phases[breathPhaseIndex].dur;
+    updateBreathUI();
+  } else {
+    document.getElementById('breath-count').textContent = phaseTimer;
+  }
+}
+
+function updateBreathUI() {
+  const phase = phases[breathPhaseIndex];
+  const circle = document.getElementById('circle-main');
+  circle.className = 'circle-main ' + phase.cls;
+  document.getElementById('breath-phase').textContent = phase.name;
+  document.getElementById('breath-count').textContent = phase.dur;
+  const roundText = breathMode === 0 ? 'ROUND ' + (currentRound + 1) : 'ROUND ' + (currentRound + 1) + ' / ' + breathMode;
+  document.getElementById('breath-rounds').textContent = roundText;
+}
+
+// ── NAVIGATION ──
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  document.getElementById('bnav-' + name).classList.add('active');
+  if (name !== 'breath' && breathRunning) stopBreath();
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── START ──
+init();
+</script>
+</body>
+</html>
