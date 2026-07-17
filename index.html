@@ -799,6 +799,24 @@
 
   .onboarding-begin:hover { background: var(--gold-soft); }
 
+  .onboarding-questions.hidden { display: none; }
+
+  .onboarding-opening-quote {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-style: italic;
+    color: #C9930C;
+    text-align: center;
+    font-size: 20px;
+    line-height: 1.65;
+    padding: 48px 12px 32px;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .onboarding-opening-quote.visible {
+    opacity: 1;
+  }
+
   body.onboarding-active .app,
   body.onboarding-active .bottom-nav {
     visibility: hidden;
@@ -817,43 +835,47 @@
 <div class="onboarding hidden" id="onboarding">
   <div class="onboarding-inner">
     <div class="onboarding-brand">RISE</div>
-    <div class="onboarding-title">Welcome</div>
+    <div class="onboarding-title" id="onboarding-title">Welcome</div>
 
-    <div class="onboarding-section">
-      <div class="onboarding-label">What shall we call you?</div>
-      <input type="text" class="onboarding-name-input" id="onboarding-name" placeholder="Your first name" autocomplete="given-name">
-    </div>
+    <div id="onboarding-questions">
+      <div class="onboarding-section">
+        <div class="onboarding-label">What shall we call you?</div>
+        <input type="text" class="onboarding-name-input" id="onboarding-name" placeholder="Your first name" autocomplete="given-name">
+      </div>
 
-    <div class="onboarding-section">
-      <div class="onboarding-label">What are you moving through right now?</div>
-      <div class="onboarding-options" id="options-life">
-        <button type="button" class="onboarding-option" data-value="A career transition or new role">A career transition or new role</button>
-        <button type="button" class="onboarding-option" data-value="A spiritual awakening or calling emerging">A spiritual awakening or calling emerging</button>
-        <button type="button" class="onboarding-option" data-value="Grief, loss, or an ending">Grief, loss, or an ending</button>
-        <button type="button" class="onboarding-option" data-value="Building something new - a business, a life">Building something new - a business, a life</button>
-        <button type="button" class="onboarding-option" data-value="Recovering my power after a long dimming">Recovering my power after a long dimming</button>
+      <div class="onboarding-section">
+        <div class="onboarding-label">What are you moving through right now?</div>
+        <div class="onboarding-options" id="options-life">
+          <button type="button" class="onboarding-option" data-value="A career transition or new role">A career transition or new role</button>
+          <button type="button" class="onboarding-option" data-value="A spiritual awakening or calling emerging">A spiritual awakening or calling emerging</button>
+          <button type="button" class="onboarding-option" data-value="Grief, loss, or an ending">Grief, loss, or an ending</button>
+          <button type="button" class="onboarding-option" data-value="Building something new - a business, a life">Building something new - a business, a life</button>
+          <button type="button" class="onboarding-option" data-value="Recovering my power after a long dimming">Recovering my power after a long dimming</button>
+        </div>
+      </div>
+
+      <div class="onboarding-section">
+        <div class="onboarding-label">What is your relationship with practice?</div>
+        <div class="onboarding-options" id="options-experience">
+          <button type="button" class="onboarding-option" data-value="I am completely new to this">I am completely new to this</button>
+          <button type="button" class="onboarding-option" data-value="I have some experience with meditation or yoga">I have some experience with meditation or yoga</button>
+          <button type="button" class="onboarding-option" data-value="I have a deep practice and need more structure">I have a deep practice and need more structure</button>
+          <button type="button" class="onboarding-option" data-value="I am a teacher who has lost their thread">I am a teacher who has lost their thread</button>
+        </div>
+      </div>
+
+      <div class="onboarding-section">
+        <div class="onboarding-label">What does 90 days mean to you?</div>
+        <div class="onboarding-options" id="options-intention">
+          <button type="button" class="onboarding-option" data-value="Establish one daily anchor I can trust">Establish one daily anchor I can trust</button>
+          <button type="button" class="onboarding-option" data-value="Transform my life completely">Transform my life completely</button>
+          <button type="button" class="onboarding-option" data-value="Prove something to myself">Prove something to myself</button>
+          <button type="button" class="onboarding-option" data-value="Feel like myself again">Feel like myself again</button>
+        </div>
       </div>
     </div>
 
-    <div class="onboarding-section">
-      <div class="onboarding-label">What is your relationship with practice?</div>
-      <div class="onboarding-options" id="options-experience">
-        <button type="button" class="onboarding-option" data-value="I am completely new to this">I am completely new to this</button>
-        <button type="button" class="onboarding-option" data-value="I have some experience with meditation or yoga">I have some experience with meditation or yoga</button>
-        <button type="button" class="onboarding-option" data-value="I have a deep practice and need more structure">I have a deep practice and need more structure</button>
-        <button type="button" class="onboarding-option" data-value="I am a teacher who has lost their thread">I am a teacher who has lost their thread</button>
-      </div>
-    </div>
-
-    <div class="onboarding-section">
-      <div class="onboarding-label">What does 90 days mean to you?</div>
-      <div class="onboarding-options" id="options-intention">
-        <button type="button" class="onboarding-option" data-value="Establish one daily anchor I can trust">Establish one daily anchor I can trust</button>
-        <button type="button" class="onboarding-option" data-value="Transform my life completely">Transform my life completely</button>
-        <button type="button" class="onboarding-option" data-value="Prove something to myself">Prove something to myself</button>
-        <button type="button" class="onboarding-option" data-value="Feel like myself again">Feel like myself again</button>
-      </div>
-    </div>
+    <div class="onboarding-opening-quote" id="onboarding-quote"></div>
 
     <button type="button" class="onboarding-begin" id="onboarding-begin" onclick="completeOnboarding()">Begin</button>
   </div>
@@ -1101,6 +1123,16 @@
 // ── ONBOARDING ──
 const ONBOARDING_KEY = 'rise_onboarding';
 let onboardingSelections = { lifeSituation: '', experienceLevel: '', intention: '' };
+let onboardingQuotePhase = false;
+let onboardingQuoteTimer = null;
+
+const OPENING_QUOTES = {
+  'A career transition or new role': 'The career IS the tapasya. What I am building in the world is what I am building inside. Saturn rewards what is built with patience and integrity. I walk in as the solution. Not the candidate.',
+  'A spiritual awakening or calling emerging': 'The feeling of readiness never arrives before the action. The action is what creates the feeling. I am already the awareness in which all of this is happening. The snake is not waiting to become the dragon.',
+  'Grief, loss, or an ending': 'Chod teaches: the thing I most avoid is the door. I do not have to stop grieving. I have to stop running from the grief. The container holds what I cannot hold alone.',
+  'Building something new - a business, a life': 'The sadhana is not the preparation. The sadhana is the rising. What I build in the world and what I build inside are the same act. The 40-day commitment is who I am becoming.',
+  'Recovering my power after a long dimming': 'Full power is not dangerous. It is my nature. Every time I stay in the rising energy without reaching for the dimmer switch, the old pattern loses its grip. I am allowed to be this.'
+};
 
 function getOnboardingProfile() {
   try { return JSON.parse(localStorage.getItem(ONBOARDING_KEY) || 'null'); } catch(e) { return null; }
@@ -1127,18 +1159,39 @@ function wireOnboardingOptions(groupId, key) {
   });
 }
 
+function showOpeningQuote() {
+  onboardingQuotePhase = true;
+  document.getElementById('onboarding-questions').classList.add('hidden');
+  document.getElementById('onboarding-title').classList.add('hidden');
+
+  const quoteEl = document.getElementById('onboarding-quote');
+  quoteEl.textContent = OPENING_QUOTES[onboardingSelections.lifeSituation] || '';
+  requestAnimationFrame(() => quoteEl.classList.add('visible'));
+
+  document.getElementById('onboarding-begin').classList.remove('visible');
+  if (onboardingQuoteTimer) clearTimeout(onboardingQuoteTimer);
+  onboardingQuoteTimer = setTimeout(() => {
+    document.getElementById('onboarding-begin').classList.add('visible');
+  }, 3000);
+}
+
 function updateOnboardingBegin() {
   const name = document.getElementById('onboarding-name').value.trim();
   const ready = name &&
     onboardingSelections.lifeSituation &&
     onboardingSelections.experienceLevel &&
     onboardingSelections.intention;
-  document.getElementById('onboarding-begin').classList.toggle('visible', !!ready);
+
+  if (ready && !onboardingQuotePhase) {
+    showOpeningQuote();
+  }
 }
 
 function completeOnboarding() {
   const name = document.getElementById('onboarding-name').value.trim();
   if (!name || !onboardingSelections.lifeSituation || !onboardingSelections.experienceLevel || !onboardingSelections.intention) return;
+
+  if (onboardingQuoteTimer) clearTimeout(onboardingQuoteTimer);
 
   localStorage.setItem(ONBOARDING_KEY, JSON.stringify({
     name: name,
