@@ -664,13 +664,200 @@
     line-height: 1;
   }
 
+  /* ── ONBOARDING ── */
+  .onboarding {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: #0A1628;
+    color: #C9930C;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .onboarding.hidden { display: none; }
+
+  .onboarding-inner {
+    max-width: 440px;
+    margin: 0 auto;
+    min-height: 100%;
+    padding: 48px 28px 40px;
+  }
+
+  .onboarding-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .onboarding-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    text-align: center;
+    letter-spacing: 0.02em;
+    margin-bottom: 40px;
+  }
+
+  .onboarding-section {
+    margin-bottom: 32px;
+  }
+
+  .onboarding-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-style: italic;
+    line-height: 1.4;
+    margin-bottom: 14px;
+    color: #C9930C;
+  }
+
+  .onboarding-name-input {
+    width: 100%;
+    background: rgba(201,147,12,0.06);
+    border: 1px solid rgba(201,147,12,0.25);
+    border-radius: 10px;
+    padding: 16px 18px;
+    color: #C9930C;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  .onboarding-name-input:focus {
+    outline: none;
+    border-color: rgba(201,147,12,0.55);
+  }
+
+  .onboarding-name-input::placeholder {
+    color: rgba(201,147,12,0.35);
+  }
+
+  .onboarding-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .onboarding-option {
+    width: 100%;
+    padding: 18px 20px;
+    background: rgba(201,147,12,0.06);
+    border: 1.5px solid rgba(201,147,12,0.2);
+    border-radius: 12px;
+    color: #C9930C;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.45;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .onboarding-option:hover {
+    background: rgba(201,147,12,0.12);
+    border-color: rgba(201,147,12,0.4);
+  }
+
+  .onboarding-option.selected {
+    background: rgba(201,147,12,0.18);
+    border-color: #C9930C;
+    box-shadow: 0 0 12px rgba(201,147,12,0.2);
+  }
+
+  .onboarding-begin {
+    width: 100%;
+    padding: 18px;
+    background: #C9930C;
+    border: none;
+    border-radius: 10px;
+    color: #0A1628;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.2s;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+  }
+
+  .onboarding-begin.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .onboarding-begin:hover { background: var(--gold-soft); }
+
+  body.onboarding-active .app,
+  body.onboarding-active .bottom-nav {
+    visibility: hidden;
+  }
+
   /* Responsive */
   @media (max-width: 440px) {
     .app { padding: 0 0 100px; }
+    .onboarding-inner { padding: 40px 24px 32px; }
   }
 </style>
 </head>
 <body>
+
+<!-- First-time onboarding -->
+<div class="onboarding hidden" id="onboarding">
+  <div class="onboarding-inner">
+    <div class="onboarding-brand">RISE</div>
+    <div class="onboarding-title">Welcome</div>
+
+    <div class="onboarding-section">
+      <div class="onboarding-label">What shall we call you?</div>
+      <input type="text" class="onboarding-name-input" id="onboarding-name" placeholder="Your first name" autocomplete="given-name">
+    </div>
+
+    <div class="onboarding-section">
+      <div class="onboarding-label">What are you moving through right now?</div>
+      <div class="onboarding-options" id="options-life">
+        <button type="button" class="onboarding-option" data-value="A career transition or new role">A career transition or new role</button>
+        <button type="button" class="onboarding-option" data-value="A spiritual awakening or calling emerging">A spiritual awakening or calling emerging</button>
+        <button type="button" class="onboarding-option" data-value="Grief, loss, or an ending">Grief, loss, or an ending</button>
+        <button type="button" class="onboarding-option" data-value="Building something new - a business, a life">Building something new - a business, a life</button>
+        <button type="button" class="onboarding-option" data-value="Recovering my power after a long dimming">Recovering my power after a long dimming</button>
+      </div>
+    </div>
+
+    <div class="onboarding-section">
+      <div class="onboarding-label">What is your relationship with practice?</div>
+      <div class="onboarding-options" id="options-experience">
+        <button type="button" class="onboarding-option" data-value="I am completely new to this">I am completely new to this</button>
+        <button type="button" class="onboarding-option" data-value="I have some experience with meditation or yoga">I have some experience with meditation or yoga</button>
+        <button type="button" class="onboarding-option" data-value="I have a deep practice and need more structure">I have a deep practice and need more structure</button>
+        <button type="button" class="onboarding-option" data-value="I am a teacher who has lost their thread">I am a teacher who has lost their thread</button>
+      </div>
+    </div>
+
+    <div class="onboarding-section">
+      <div class="onboarding-label">What does 90 days mean to you?</div>
+      <div class="onboarding-options" id="options-intention">
+        <button type="button" class="onboarding-option" data-value="Establish one daily anchor I can trust">Establish one daily anchor I can trust</button>
+        <button type="button" class="onboarding-option" data-value="Transform my life completely">Transform my life completely</button>
+        <button type="button" class="onboarding-option" data-value="Prove something to myself">Prove something to myself</button>
+        <button type="button" class="onboarding-option" data-value="Feel like myself again">Feel like myself again</button>
+      </div>
+    </div>
+
+    <button type="button" class="onboarding-begin" id="onboarding-begin" onclick="completeOnboarding()">Begin</button>
+  </div>
+</div>
 
 <div class="app">
   <div class="header">
@@ -911,6 +1098,75 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// ── ONBOARDING ──
+const ONBOARDING_KEY = 'rise_onboarding';
+let onboardingSelections = { lifeSituation: '', experienceLevel: '', intention: '' };
+
+function getOnboardingProfile() {
+  try { return JSON.parse(localStorage.getItem(ONBOARDING_KEY) || 'null'); } catch(e) { return null; }
+}
+
+function showOnboarding() {
+  document.body.classList.add('onboarding-active');
+  document.getElementById('onboarding').classList.remove('hidden');
+}
+
+function hideOnboarding() {
+  document.body.classList.remove('onboarding-active');
+  document.getElementById('onboarding').classList.add('hidden');
+}
+
+function wireOnboardingOptions(groupId, key) {
+  document.querySelectorAll('#' + groupId + ' .onboarding-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#' + groupId + ' .onboarding-option').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      onboardingSelections[key] = btn.dataset.value;
+      updateOnboardingBegin();
+    });
+  });
+}
+
+function updateOnboardingBegin() {
+  const name = document.getElementById('onboarding-name').value.trim();
+  const ready = name &&
+    onboardingSelections.lifeSituation &&
+    onboardingSelections.experienceLevel &&
+    onboardingSelections.intention;
+  document.getElementById('onboarding-begin').classList.toggle('visible', !!ready);
+}
+
+function completeOnboarding() {
+  const name = document.getElementById('onboarding-name').value.trim();
+  if (!name || !onboardingSelections.lifeSituation || !onboardingSelections.experienceLevel || !onboardingSelections.intention) return;
+
+  localStorage.setItem(ONBOARDING_KEY, JSON.stringify({
+    name: name,
+    lifeSituation: onboardingSelections.lifeSituation,
+    experienceLevel: onboardingSelections.experienceLevel,
+    intention: onboardingSelections.intention,
+    complete: true
+  }));
+
+  hideOnboarding();
+  init();
+}
+
+function initOnboarding() {
+  const profile = getOnboardingProfile();
+  if (profile && profile.complete) {
+    hideOnboarding();
+    return false;
+  }
+
+  wireOnboardingOptions('options-life', 'lifeSituation');
+  wireOnboardingOptions('options-experience', 'experienceLevel');
+  wireOnboardingOptions('options-intention', 'intention');
+  document.getElementById('onboarding-name').addEventListener('input', updateOnboardingBegin);
+  showOnboarding();
+  return true;
+}
+
 // ── STATE ──
 // currentDayNum = the day she is actively working on (1-90)
 // completedDays = array of day numbers she has fully completed
@@ -1250,7 +1506,7 @@ function showToast(msg) {
 }
 
 // ── START ──
-init();
+if (!initOnboarding()) init();
 </script>
 </body>
 </html>
