@@ -964,7 +964,7 @@
       </div>
       <div class="check-item" id="check-12" onclick="toggleCheck(12)">
         <div class="check-box"></div>
-        <div class="check-text">Evening question written: Where did I dim myself today?</div>
+        <div class="check-text" id="check-12-text">Evening question written</div>
         <div class="check-time">8:50</div>
       </div>
       <div class="check-item" id="check-13" onclick="toggleCheck(13)">
@@ -1019,19 +1019,19 @@
   <div class="screen" id="screen-journal">
     <div class="journal-q">
       <div class="q-label">Question 1 · Morning</div>
-      <div class="q-text">What am I afraid of today?</div>
+      <div class="q-text" id="jq1"></div>
       <textarea class="q-input" id="j1" placeholder="Be honest, not positive..." rows="3"></textarea>
     </div>
 
     <div class="journal-q">
       <div class="q-label">Question 2 · Morning</div>
-      <div class="q-text">What do I know to be true today?</div>
+      <div class="q-text" id="jq2"></div>
       <textarea class="q-input" id="j2" placeholder="Anchor yourself here..." rows="3"></textarea>
     </div>
 
     <div class="journal-q">
       <div class="q-label">Question 3 · Morning</div>
-      <div class="q-text">What is the one move that matters today?</div>
+      <div class="q-text" id="jq3"></div>
       <textarea class="q-input" id="j3" placeholder="Just one..." rows="3"></textarea>
     </div>
 
@@ -1047,7 +1047,7 @@
 
     <div class="journal-q">
       <div class="q-label">Question 4 · Evening</div>
-      <div class="q-text">Where did I dim myself today — and why?</div>
+      <div class="q-text" id="jq4"></div>
       <textarea class="q-input" id="j4" placeholder="Name it without judgment. Then let it go." rows="3"></textarea>
     </div>
 
@@ -1136,6 +1136,58 @@ const OPENING_QUOTES = {
 
 function getOnboardingProfile() {
   try { return JSON.parse(localStorage.getItem(ONBOARDING_KEY) || 'null'); } catch(e) { return null; }
+}
+
+const JOURNAL_QUESTIONS = {
+  'A career transition or new role': {
+    q1: 'Where did I lead from full power today — and where did I dim?',
+    q2: 'What is the one move that actually matters today beneath all the noise?',
+    q3: 'What would I do differently if I knew this role was already mine?',
+    q4: 'Where did I dim myself today — and what was I protecting?'
+  },
+  'A spiritual awakening or calling emerging': {
+    q1: 'What is trying to emerge in me that I keep pushing back down?',
+    q2: 'Where did I mistake the expansion for something dangerous today?',
+    q3: 'What does the awareness watching all of this already know?',
+    q4: 'Where did I contract away from what was opening today?'
+  },
+  'Grief, loss, or an ending': {
+    q1: 'What am I being asked to release that I am still holding?',
+    q2: 'What would I say to what I have lost, if I could say the true thing?',
+    q3: 'What is being born in the space that the grief is creating?',
+    q4: 'What did I carry today that I can set down before sleep?'
+  },
+  'Building something new - a business, a life': {
+    q1: 'What is the one move that matters today — not ten things, the one?',
+    q2: 'Where did I let perfect be the enemy of begun today?',
+    q3: 'What does the thing I am building need from me that I am withholding?',
+    q4: 'What did I actually move forward today, however small?'
+  },
+  'Recovering my power after a long dimming': {
+    q1: 'Where did I dim myself today — and what was I protecting?',
+    q2: 'What would I have said if I had stayed in my full power?',
+    q3: 'What does the version of me who never dimmed herself know?',
+    q4: 'Where did I choose power over smallness today? Celebrate that.'
+  }
+};
+
+function getJournalQuestions() {
+  const profile = getOnboardingProfile();
+  const lifeSituation = profile && profile.lifeSituation;
+  return JOURNAL_QUESTIONS[lifeSituation] || null;
+}
+
+function applyJournalQuestions() {
+  const questions = getJournalQuestions();
+  if (!questions) return;
+
+  ['q1', 'q2', 'q3', 'q4'].forEach((key, i) => {
+    const el = document.getElementById('jq' + (i + 1));
+    if (el) el.textContent = questions[key];
+  });
+
+  const check12 = document.getElementById('check-12-text');
+  if (check12) check12.textContent = 'Evening question written: ' + questions.q4;
 }
 
 function showOnboarding() {
@@ -1291,6 +1343,7 @@ const quotes = [
 
 // ── INIT ──
 function init() {
+  applyJournalQuestions();
   const day = activeDay();
   document.getElementById('day-number').textContent = day;
   document.getElementById('daily-quote').textContent = quotes[(day - 1) % quotes.length];
